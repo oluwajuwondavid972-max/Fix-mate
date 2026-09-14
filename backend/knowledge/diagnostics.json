@@ -1,0 +1,165 @@
+
+{
+  "devices": {
+    "standing_fan": {
+      "name": "Standing Fan",
+      "problems": {
+        "fan_not_turning_on": {
+          "name": "Fan does not turn on",
+          "description": "The fan does not respond when plugged in and switched on.",
+
+          "safety_check": {
+            "question": "Before we continue, do you notice any sparks, smoke, burning smell, electric shock, exposed or damaged wires, or a melted/burnt plug or socket?",
+            "options": [
+              "Yes",
+              "No",
+              "I'm not sure"
+            ],
+
+            "dangerous_answers": [
+              "yes"
+            ]
+          },
+
+          "diagnostic_steps": [
+            {
+              "id": "power_source",
+              "question": "Does the socket you're using currently provide power to another appliance?",
+              "type": "power_check",
+
+              "answers": {
+                "yes": {
+                  "next_step": "plug_check"
+                },
+                "no": {
+                  "next_step": "try_another_socket"
+                },
+                "not_sure": {
+                  "next_step": "power_source_check"
+                }
+              }
+            },
+
+            {
+              "id": "try_another_socket",
+              "question": "Can you try the fan in another socket that you know is working?",
+              "type": "socket_test",
+
+              "answers": {
+                "yes_fan_works": {
+                  "cause": "original_socket_problem",
+                  "confidence": "high",
+                  "action": "solved",
+                  "message": "The original socket appears to be the problem. The fan works when connected to another working socket."
+                },
+                "no_fan_still_does_not_work": {
+                  "next_step": "plug_check"
+                },
+                "not_sure": {
+                  "next_step": "plug_check"
+                }
+              }
+            },
+
+            {
+              "id": "power_source_check",
+              "question": "Can you confirm whether the socket powers another appliance?",
+              "type": "power_confirmation",
+
+              "answers": {
+                "yes": {
+                  "next_step": "plug_check"
+                },
+                "no": {
+                  "next_step": "try_another_socket"
+                },
+                "not_sure": {
+                  "next_step": "plug_check"
+                }
+              }
+            },
+
+            {
+              "id": "plug_check",
+              "question": "Does the fan's plug or power cable show any visible damage, such as cuts, exposed wires, melting, or burn marks?",
+              "type": "visual_inspection",
+
+              "answers": {
+                "yes": {
+                  "cause": "damaged_plug_or_cable",
+                  "confidence": "high",
+                  "action": "technician_referral",
+                  "message": "The plug or power cable appears to be damaged. Do not attempt to repair the cable yourself. The fan should be inspected or have the damaged component replaced by a qualified technician."
+                },
+                "no": {
+                  "next_step": "fan_response"
+                },
+                "not_sure": {
+                  "next_step": "fan_response"
+                }
+              }
+            },
+
+            {
+              "id": "fan_response",
+              "question": "When you switch the fan on, does anything happen at all?",
+              "type": "device_response",
+
+              "answers": {
+                "nothing": {
+                  "next_step": "speed_settings"
+                },
+                "sound": {
+                  "next_step": "speed_settings"
+                },
+                "sign_of_power": {
+                  "next_step": "speed_settings"
+                },
+                "not_sure": {
+                  "next_step": "speed_settings"
+                }
+              }
+            },
+
+            {
+              "id": "speed_settings",
+              "question": "Does the fan have different speed settings, and have you tried switching between them?",
+              "type": "control_check",
+
+              "answers": {
+                "one_setting_works": {
+                  "cause": "speed_control_problem",
+                  "confidence": "moderate",
+                  "action": "technician_referral",
+                  "message": "Since one speed setting works while the others do not, there may be a problem with the fan's speed control or switch. Fixing an internal control may require opening the appliance, so I recommend having a technician inspect it."
+                },
+                "none_work": {
+                  "next_step": "internal_fault"
+                },
+                "not_sure": {
+                  "next_step": "internal_fault"
+                },
+                "fan_has_no_speed_settings": {
+                  "next_step": "internal_fault"
+                }
+              }
+            },
+
+            {
+              "id": "internal_fault",
+              "question": null,
+              "type": "internal_fault",
+
+              "result": {
+                "cause": "internal_electrical_or_motor_fault",
+                "confidence": "low",
+                "action": "technician_referral",
+                "message": "The socket appears to have power and the plug and cable show no obvious external damage, but the fan still does not respond. The problem may involve an internal switch, fuse, wiring, motor, or another electrical component. These components require opening the appliance and potentially working around mains electricity. I recommend having a qualified technician inspect it."
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

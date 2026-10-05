@@ -1,4 +1,3 @@
-
 {
   "devices": {
     "standing_fan": {
@@ -155,6 +154,175 @@
                 "confidence": "low",
                 "action": "technician_referral",
                 "message": "The socket appears to have power and the plug and cable show no obvious external damage, but the fan still does not respond. The problem may involve an internal switch, fuse, wiring, motor, or another electrical component. These components require opening the appliance and potentially working around mains electricity. I recommend having a qualified technician inspect it."
+              }
+            }
+          ]
+        },
+
+        "fan_not_spinning": {
+          "name": "Fan turns on but does not spin",
+          "description": "The fan powers on, but the blades do not rotate.",
+
+          "safety_check": {
+            "question": "Before we continue, do you notice any sparks, smoke, burning smell, electric shock, exposed or damaged wires, or a melted/burnt plug or socket?",
+            "options": [
+              "Yes",
+              "No",
+              "I'm not sure"
+            ],
+
+            "dangerous_answers": [
+              "yes"
+            ]
+          },
+
+          "diagnostic_steps": [
+            {
+              "id": "motor_sound",
+              "question": "When you switch the fan on, do you hear a humming or buzzing sound even though the blades are not spinning?",
+              "type": "motor_sound_check",
+
+              "answers": {
+                "yes": {
+                  "next_step": "blade_movement"
+                },
+                "no": {
+                  "next_step": "blade_movement"
+                },
+                "not_sure": {
+                  "next_step": "blade_movement"
+                }
+              }
+            },
+
+            {
+              "id": "blade_movement",
+              "question": "With the fan switched OFF and unplugged, do the blades move freely when you gently turn them by hand?",
+              "type": "blade_movement_check",
+
+              "answers": {
+                "yes": {
+                  "next_step": "electrical_diagnosis"
+                },
+                "no": {
+                  "next_step": "debris_check"
+                },
+                "not_sure": {
+                  "next_step": "technician_mechanical"
+                }
+              }
+            },
+
+            {
+              "id": "debris_check",
+              "question": "With the fan still unplugged, can you see any dust, hair, cloth, or other debris physically blocking the blades or preventing them from moving freely?",
+              "type": "debris_check",
+
+              "answers": {
+                "yes": {
+                  "cause": "debris_obstruction",
+                  "confidence": "high",
+                  "action": "guide_repair",
+                  "message": "There appears to be a visible obstruction preventing the blades from moving freely. Keep the fan unplugged and remove only the visible obstruction without opening the fan. Afterward, reconnect the fan and check whether the blades spin normally."
+                },
+                "no": {
+                  "next_step": "bearing_check"
+                },
+                "not_sure": {
+                  "next_step": "technician_mechanical"
+                }
+              }
+            },
+
+            {
+              "id": "bearing_check",
+              "question": "With the fan unplugged, do the blades feel unusually stiff or difficult to turn compared with how they normally move?",
+              "type": "bearing_check",
+
+              "answers": {
+                "yes": {
+                  "next_step": "lubrication_check"
+                },
+                "no": {
+                  "next_step": "technician_mechanical"
+                },
+                "not_sure": {
+                  "next_step": "technician_mechanical"
+                }
+              }
+            },
+
+            {
+              "id": "lubrication_check",
+              "question": "Does your fan have a clearly accessible lubrication point for the blade shaft or bearing, as specified by the fan's manual or manufacturer instructions?",
+              "type": "lubrication_check",
+
+              "answers": {
+                "yes": {
+                  "cause": "stiff_or_dry_bearing",
+                  "confidence": "moderate",
+                  "action": "guide_repair",
+                  "message": "The blades feel unusually stiff and the fan appears to have an accessible lubrication point. Follow the fan manufacturer's instructions for cleaning and lubricating that point. Do not open the motor housing or work on any electrical components. After servicing it, check whether the blades spin normally."
+                },
+                "no": {
+                  "cause": "stiff_or_seized_bearing",
+                  "confidence": "moderate",
+                  "action": "technician_referral",
+                  "message": "The blades appear to be stiff, but there is no clearly accessible lubrication point. This may indicate a worn, dry, or seized bearing or another mechanical problem. I recommend having a qualified technician inspect it rather than opening the motor housing yourself."
+                },
+                "not_sure": {
+                  "cause": "possible_bearing_problem",
+                  "confidence": "low",
+                  "action": "technician_referral",
+                  "message": "The blades appear to have abnormal resistance, but the cause cannot be safely determined from the available checks. A qualified technician should inspect the fan."
+                }
+              }
+            },
+
+            {
+              "id": "electrical_diagnosis",
+              "question": "When the fan is switched on, does the motor make any humming, buzzing, or other sound that suggests it is trying to start?",
+              "type": "electrical_response_check",
+
+              "answers": {
+                "yes": {
+                  "cause": "faulty_start_capacitor",
+                  "confidence": "moderate",
+                  "action": "technician_referral",
+                  "message": "The fan's blades move freely, but the motor appears to be trying to start without turning the blades. A faulty start capacitor is one possible cause. Confirming or replacing the capacitor requires internal electrical work, so I recommend having a qualified technician inspect the fan."
+                },
+                "no": {
+                  "next_step": "internal_electrical_fault"
+                },
+                "not_sure": {
+                  "next_step": "internal_electrical_fault"
+                }
+              }
+            },
+
+            {
+              "id": "internal_electrical_fault",
+              "question": null,
+              "type": "internal_electrical_fault",
+
+              "result": {
+                "cause": "possible_thermal_fuse_or_internal_wiring_fault",
+                "confidence": "low",
+                "action": "technician_referral",
+                "message": "The blades move freely, but there is no clear sign that the motor is trying to start. Possible causes include a blown thermal fuse, loose or broken internal wiring, or another internal electrical fault. These components require opening or testing the appliance, so I recommend having a qualified technician inspect it."
+              }
+            },
+
+            {
+              "id": "technician_mechanical",
+              "question": null,
+              "type": "mechanical_fault",
+
+              "result": {
+                "cause": "possible_mechanical_fault",
+                "confidence": "low",
+                "action": "technician_referral",
+                "message": "The blades do not move as expected, but the cause cannot be safely determined through the available external checks. There may be a bearing or another internal mechanical problem. I recommend having a qualified technician inspect the fan."
               }
             }
           ]

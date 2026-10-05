@@ -191,19 +191,24 @@ def normalize_answer(step_id: str, user_message: str) -> str:
         if any(
             phrase in message
             for phrase in [
-                "no power",
-                "there is no power",
-                "there isn't any power",
-                "there is not any power",
-                "the socket is dead",
-                "the socket doesn't work",
-                "the socket does not work",
-                "another appliance doesn't work",
-                "another appliance does not work",
-                "another device doesn't work",
-                "another device does not work",
-                "nothing works in the socket",
-                "the socket has no power",
+        "no power",
+        "there is no power",
+        "there isn't any power",
+        "there is not any power",
+        "no power in the socket",
+        "there is no power in the socket",
+        "there isn't any power in the socket",
+        "there is not any power in the socket",
+        "the socket is dead",
+        "the socket doesn't work",
+        "the socket does not work",
+        "another appliance doesn't work",
+        "another appliance does not work",
+        "another device doesn't work",
+        "another device does not work",
+        "nothing works in the socket",
+        "the socket has no power",
+        "No, there is no power in the socket",
             ]
         ):
             return "no"
@@ -212,16 +217,18 @@ def normalize_answer(step_id: str, user_message: str) -> str:
         if any(
             phrase in message
             for phrase in [
-                "there is power",
-                "there's power",
-                "the socket works",
-                "the socket is working",
-                "another appliance works",
-                "another appliance is working",
-                "another device works",
-                "another device is working",
-                "the outlet works",
-                "the outlet is working",
+        "there is power",
+        "there's power",
+        "the socket works",
+        "the socket is working",
+        "another appliance works",
+        "another appliance is working",
+        "another device works",
+        "another device is working",
+        "the outlet works",
+        "the outlet is working",
+        "yes, it does",
+        "yes it does",
             ]
         ):
             return "yes"
@@ -232,6 +239,8 @@ def normalize_answer(step_id: str, user_message: str) -> str:
             "y",
             "yeah",
             "yep",
+            "yes, there is",
+            "yes, it does"
         ]:
             return "yes"
 
@@ -249,7 +258,6 @@ def normalize_answer(step_id: str, user_message: str) -> str:
 
     if step_id == "try_another_socket":
 
-        # NOT SURE
         if any(
             phrase in message
             for phrase in [
@@ -264,7 +272,6 @@ def normalize_answer(step_id: str, user_message: str) -> str:
         ):
             return "not_sure"
 
-        # FAN STILL DOES NOT WORK
         if any(
             phrase in message
             for phrase in [
@@ -285,7 +292,6 @@ def normalize_answer(step_id: str, user_message: str) -> str:
         ):
             return "no_fan_still_does_not_work"
 
-        # FAN WORKS IN OTHER SOCKET
         if any(
             phrase in message
             for phrase in [
@@ -306,7 +312,6 @@ def normalize_answer(step_id: str, user_message: str) -> str:
         ):
             return "yes_fan_works"
 
-        # EXACT YES
         if message in [
             "yes",
             "y",
@@ -315,7 +320,6 @@ def normalize_answer(step_id: str, user_message: str) -> str:
         ]:
             return "yes_fan_works"
 
-        # EXACT NO
         if message in [
             "no",
             "n",
@@ -457,6 +461,7 @@ def normalize_answer(step_id: str, user_message: str) -> str:
                 "it makes a humming sound",
                 "i hear humming",
                 "it is humming",
+                "I hear a squeaking sound",
             ]
         ):
             return "sound"
